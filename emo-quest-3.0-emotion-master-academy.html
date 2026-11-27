@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#6754c8">
+<title>EMO QUEST｜进阶情绪探险岛</title>
+<style>
+:root{--ink:#292448;--muted:#716d88;--purple:#7059cf;--line:#e9e5f3;--bg:#f7f5ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 5%,#f0eaff,transparent 30%),radial-gradient(circle at 90% 20%,#fff0f5,transparent 28%),var(--bg);font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;color:var(--ink)}
+button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:3px solid #aa94f4;outline-offset:3px}
+.app{max-width:980px;margin:auto;padding:16px 14px 42px}.top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}.brand{font-weight:950;color:#5b49b0;letter-spacing:.08em}.stats{display:flex;gap:7px;flex-wrap:wrap}.pill{background:white;border:1px solid var(--line);border-radius:30px;padding:7px 11px;font-size:.86rem}
+.hero{border-radius:25px;padding:25px 18px;color:white;text-align:center;background:linear-gradient(125deg,#5044a9,#8661d7 58%,#df91bd);box-shadow:0 12px 35px #3c2a7515}.hero .emoji{font-size:3.3rem}.hero h1{margin:0;font-size:clamp(2rem,6vw,3rem);letter-spacing:.07em}.hero p{margin:7px 0 0}.card{background:white;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 10px 28px #3c2a750d;margin-top:14px}.hidden{display:none!important}.muted{color:var(--muted)}.small{font-size:.88rem}.center{text-align:center}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.btn{border:1px solid var(--line);border-radius:13px;background:white;color:var(--ink);padding:12px;text-align:left;font-weight:700}.btn:hover{border-color:#b8a7ef;background:#fcfaff}.btn.primary{background:var(--purple);border-color:var(--purple);color:white;text-align:center;width:100%}.btn.soft{background:#f5f1ff;color:#51439c}.btn.selected{border:2px solid var(--purple);background:#f5f1ff}.btn:disabled{opacity:1;cursor:default}
+.field{display:block;font-weight:750;font-size:.92rem;margin:13px 0 6px}input{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px}
+.avatar{font-size:2rem;display:block;margin-bottom:4px}.avatar-btn{text-align:center}
+.progress{height:9px;background:#eeeaf7;border-radius:30px;overflow:hidden;margin-top:8px}.progress div{height:100%;background:linear-gradient(90deg,#8068dd,#d68ac0);width:0;transition:width .25s}
+.island{min-height:135px;display:flex;flex-direction:column;justify-content:space-between}.island .ico{font-size:2rem}.island.done{background:#f1fbf6;border-color:#9bd9c5}
+.story{background:#f6f3ff;border-radius:13px;padding:13px;color:#55479c;font-weight:650;font-size:.93rem}.question{font-size:1.15rem;font-weight:850;line-height:1.55;margin:13px 0}
+.option{width:100%;padding:12px;border:1.5px solid var(--line);border-radius:12px;background:white;text-align:left;color:var(--ink);margin:5px 0;line-height:1.45}.option:hover{border-color:#a58eea}.option.correct{border-color:#54b995;background:#effbf6}.option.wrong{border-color:#e6a06f;background:#fff7f0}
+.feedback{padding:13px;border-radius:13px;background:#f5f2ff;border:1px solid #e6defb;line-height:1.5;margin-top:12px}.feedback.good{background:#effaf5;border-color:#c8ecdc}
+.skillcard{margin-top:12px;padding:14px;border:1px solid #d9cef9;background:linear-gradient(135deg,#f7f3ff,#fff7fb);border-radius:14px}.skillcard h3{margin:0 0 7px;color:#5d49b5}.skillstep{margin:5px 0;font-size:.9rem}.skill-action{background:#fff;border:1px dashed #b6a4e8;border-radius:10px;padding:10px;margin-top:9px;font-size:.88rem}.skill-save{margin-top:10px;border:0;background:#7059cf;color:white;border-radius:10px;padding:9px 12px;font-weight:750}.skill-save:disabled{background:#65aa91}
+.tag{display:inline-block;border-radius:30px;padding:5px 9px;background:#f1edff;color:#6250b6;font-size:.77rem;font-weight:800}
+.checkrow{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--line);padding:11px;border-radius:12px;margin:7px 0;cursor:pointer}.checkrow input{width:auto;margin-top:4px;accent-color:var(--purple)}
+.sequence button{display:flex;align-items:center;gap:10px;width:100%;margin:7px 0}.sequence .num{background:#f0ecff;color:#6754c8;border-radius:50%;width:27px;height:27px;display:grid;place-items:center;flex:none}
+.footer{text-align:center;font-size:.78rem;color:var(--muted);margin-top:20px}
+@media(max-width:600px){.app{padding:11px}.card{padding:15px}.grid3{grid-template-columns:repeat(2,minmax(0,1fr))}.top{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body><main class="app">
+<div class="top"><div class="brand">🌈 EMO QUEST · ADVANCED</div><div class="stats"><span class="pill">⭐ <b id="scoreTop">0</b></span><span class="pill">🧠 <b id="xpTop">0</b> XP</span><span class="pill">🏅 <b id="badgeTop">0</b>/5</span></div></div>
+<header class="hero"><div class="emoji">🏝️ 🌈 💎</div><h1>EMO QUEST</h1><p>进阶情绪探险岛</p><p class="small">不只认出情绪，更要分析、判断、选择和反思。</p></header>
+
+<section id="welcome" class="card">
+ <div class="center"><div style="font-size:2.8rem">🧭</div><h2>准备接受进阶挑战了吗？</h2><p class="muted">这次，你需要像真正的情绪策略家一样思考：分析情境、辨认需要、比较后果，并选择合适的行动。</p></div>
+ <h3>① 选择挑战等级</h3>
+ <div class="grid">
+  <button class="btn selected level" data-level="4"><span class="tag">YEAR 4</span><h3>🌱 探险家</h3><div class="small muted">辨认情绪＋选择合适方法</div></button>
+  <button class="btn level" data-level="5"><span class="tag">YEAR 5</span><h3>🧠 策略家</h3><div class="small muted">分析原因＋比较不同后果</div></button>
+  <button class="btn level" data-level="6" style="grid-column:1/-1"><span class="tag">YEAR 6</span><h3>🔥 情绪管理大师</h3><div class="small muted">多步骤判断＋复杂人际情境＋反思</div></button>
+ </div>
+ <label class="field" for="nick">② 探险昵称（不需要真实姓名）</label><input id="nick" maxlength="18" placeholder="例如：冷静小队长">
+ <label class="field">③ 选择角色</label><div class="grid3" id="avatars">
+  <button class="btn avatar-btn selected" data-avatar="🧙‍♀️"><span class="avatar">🧙‍♀️</span>魔法师</button><button class="btn avatar-btn" data-avatar="🦸"><span class="avatar">🦸</span>骑士</button><button class="btn avatar-btn" data-avatar="🧚"><span class="avatar">🧚</span>精灵</button><button class="btn avatar-btn" data-avatar="🐼"><span class="avatar">🐼</span>熊猫</button><button class="btn avatar-btn" data-avatar="🦊"><span class="avatar">🦊</span>狐狸</button><button class="btn avatar-btn" data-avatar="🐸"><span class="avatar">🐸</span>青蛙</button>
+ </div>
+ <p class="small muted">规则：答错不扣分，但需要读懂解析。多选题和步骤题必须认真判断；情绪没有标准答案，重点是安全、尊重和有效。</p>
+ <button id="start" class="btn primary">🚀 开始进阶探险</button>
+</section>
+
+<section id="map" class="hidden">
+ <div class="card"><div style="display:flex;align-items:center;gap:10px"><span id="playerAvatar" style="font-size:2.3rem"></span><div style="flex:1"><b id="playerName"></b><div id="levelLabel" class="small muted"></div></div><span class="tag" id="scoreMap">0 ⭐</span></div><h3 style="margin:15px 0 4px">🗺️ 五大进阶关卡</h3><div class="small muted" id="mapText"></div><div class="progress"><div id="mapBar"></div></div></div>
+ <div class="grid" id="islands"></div>
+ <div class="card"><b>🏅 已获得徽章</b><div id="badges" style="display:flex;justify-content:space-around;font-size:1.7rem;margin-top:12px"></div></div>
+ <details class="card"><summary style="font-weight:800;cursor:pointer">🧰 我的情绪技巧工具箱（点击查看已解锁技巧）</summary><p class="small muted">每完成一道挑战并学习技巧，就能把它收藏在这里。</p><div id="skillShelf" style="margin-top:10px"></div></details>
+</section>
+
+<section id="play" class="hidden">
+ <button id="back" class="btn soft">← 返回地图</button>
+ <div class="card">
+  <div style="display:flex;justify-content:space-between;gap:8px"><b id="stageName"></b><span id="qNo" class="small muted"></span></div><div class="progress"><div id="qBar"></div></div>
+  <div class="center" style="padding:12px"><div id="stageIcon" style="font-size:2.5rem"></div><span id="taskType" class="tag"></span></div>
+  <div id="scenario" class="story"></div><div id="prompt" class="question"></div>
+  <div id="interaction"></div>
+  <div id="feedback" class="feedback hidden" aria-live="polite"><b id="fbTitle"></b><div id="fbText" class="small" style="margin-top:5px"></div></div><div id="skillReveal" class="skillcard hidden"></div>
+  <button id="next" class="btn primary hidden" style="margin-top:12px">下一项挑战 ➜</button>
+ </div>
+ <div id="reflection" class="card hidden"><b>💭 探险家反思</b><p class="small muted" id="reflectionText"></p></div>
+</section>
+
+<section id="finish" class="hidden"><div class="card center"><div style="font-size:4rem">🏆</div><h2>进阶探险完成！</h2><div id="endAvatar" style="font-size:3rem"></div><h3 id="endName"></h3><div style="font-size:2.5rem;color:var(--purple);font-weight:950"><span id="endScore"></span> ⭐</div><h3 id="rank"></h3><p class="muted" id="rankText"></p></div><div class="card"><h3>🌱 记住这五个步骤</h3><ol><li>停一停：先暂停冲动反应。</li><li>看一看：觉察情绪和身体讯号。</li><li>想一想：找出原因、需要和可能后果。</li><li>选一选：选择安全、尊重的行动。</li><li>求帮助：需要时向可信任的大人求助。</li></ol></div><button id="toMap" class="btn primary">返回地图</button><button id="again" class="btn" style="width:100%;margin-top:8px">重新挑战</button></section>
+<div class="footer">EMO QUEST · 进阶情绪教育游戏｜适合小学四至六年级<br>提示：情绪管理不是压抑情绪，而是学习安全、有效地回应情绪。</div>
+</main>
+<script>
+(()=>{
+const $=id=>document.getElementById(id),screens=["welcome","map","play","finish"];
+function show(id){screens.forEach(x=>$(x).classList.toggle("hidden",x!==id));window.scrollTo({top:0,behavior:"smooth"});}
+let level=4,avatar="🧙‍♀️",name="小小探险家",score=0,stage=0,qi=0,answered=false,done=[false,false,false,false,false],medals=[];
+const data=[
+{n:"情绪侦探",icon:"🔍",badge:"🌈",tasks:[
+{type:"情绪与需要分析",story:"小组报告时，组员没有采用你的建议，最后报告获得很高分。你感到失落，也有点生气。",q:"哪一个分析最完整？",opts:["我一定是嫉妒别人","我可能感到失落，因为希望自己的意见被重视；同时也能为小组成功感到高兴","组员都是故意针对我","我不应该有任何情绪"],a:1,why:"复杂情境中可以同时有不同情绪。辨认情绪背后的需要（被重视、参与感）比急着责怪别人更有帮助。"},
+{type:"多选挑战",story:"你在比赛中落败，感到失望。",q:"以下哪些做法有助于健康地面对失望？（选择所有合适选项）",multi:true,opts:["允许自己难过一会儿","检视可以改进的地方","把失败解释成自己一无是处","向信任的人分享感受","故意破坏获胜者的东西"],a:[0,1,3],why:"接纳感受、反思可改进之处和寻求支持都可能有帮助。把一次失败等同于个人价值，或伤害别人，都不是健康的应对。"},
+{type:"判断后果",story:"朋友没有回复你的信息，你开始担心他是不是生气了。",q:"哪一个想法最有弹性，也最符合事实？",opts:["他一定讨厌我","他可能正在忙；我可以稍后再礼貌地询问","我应该连续发很多信息直到他回复","我也要故意不理他"],a:1,why:"先区分事实与猜测。不要把未经确认的想法当成事实。"}
+]},
+{n:"情绪解码",icon:"🧩",badge:"🔎",tasks:[
+{type:"情绪温度计",story:"你被同学当众取笑，脸发热、心跳加快，想马上反击。",q:"当情绪强度达到8/10时，哪一个行动顺序较安全？",opts:["反击 → 解释 → 冷静","暂停并保持距离 → 缓慢呼吸 → 找合适时机表达或求助","忍住不说 → 一直记恨","发到班群让大家评理"],a:1,why:"强烈情绪时先降低冲动风险，恢复一些平静后再处理问题；如果涉及欺凌或安全问题，应向老师求助。"},
+{type:"事实还是想法",story:"老师批改作业时写了「请再检查」。你心里想：「老师一定觉得我很笨。」",q:"哪一项是已知事实？",opts:["老师觉得我很笨","老师写了「请再检查」","我永远学不好","全班都比我优秀"],a:1,why:"事实是老师写了什么；「老师觉得我很笨」是未经确认的解释。区分事实和想法能避免情绪被猜测放大。"},
+{type:"多选挑战",story:"你发现自己最近常在考试前肚子不舒服、担心失败。",q:"哪些方法值得尝试？（选择所有合适选项）",multi:true,opts:["把复习分成小步骤","练习缓慢呼吸和放松","告诉可信任的大人自己的担心","完全不睡觉来复习","提醒自己一次考试不决定全部价值"],a:[0,1,2,4],why:"计划、放松、求助和较平衡的自我对话都有帮助。若身体不适持续，应告诉家长并寻求适当协助。"}
+]},
+{n:"情绪策略学院",icon:"🧠",badge:"🪄",tasks:[
+{type:"步骤排序",story:"你因为队友失误而非常生气，想责备他。",q:"请按较合适的顺序排列处理步骤。",sequence:["先暂停，避免立即责骂","觉察自己生气及身体反应","冷静后说明事情对自己的影响","一起讨论下一次如何合作"],order:[1,0,2,3],why:"先觉察，再暂停，然后表达影响，最后共同解决问题。实际生活中可根据安全和情境调整。"},
+{type:"沟通策略",story:"朋友借了你的笔却忘记归还。你很不高兴。",q:"哪一句最能清楚表达感受、事实和需要？",opts:["你每次都很自私！","你根本不尊重我！","昨天你借了我的笔还没归还，我有点着急，希望你今天还给我。","我以后再也不借任何人东西"],a:2,why:"描述具体事实、表达感受并提出清楚请求，比贴标签和指责更有助于解决问题。"},
+{type:"策略选择",story:"你尝试深呼吸后仍然很生气，因为同学持续嘲笑你。",q:"下一步最适合怎样做？",opts:["继续独自忍耐","用更大声音威胁对方","离开不安全的互动，并向老师或GBK说明具体情况","在网上公开对方个人资料"],a:2,why:"调节技巧不能保证问题自动消失。持续嘲笑可能需要成人介入；保护安全和寻求帮助是恰当的选择。"}
+]},
+{n:"真实生活实验室",icon:"🧪",badge:"🎒",tasks:[
+{type:"多方观点",story:"班上两位同学争着当组长。一位觉得自己被忽略，另一位觉得自己只是想让工作快点完成。",q:"作为旁观者，哪一种回应最有助于减少冲突？",opts:["马上认定其中一人是坏人","分别听双方说出感受和需要，再协助讨论公平分工","叫他们不要有情绪","把争执录下来分享"],a:1,why:"倾听不同观点、辨认各自需要并讨论具体安排，有助于解决冲突；不需要否定任何人的感受。"},
+{type:"界限与求助",story:"朋友要求你帮忙隐瞒他在网上收到的令人不舒服的信息，并说「不准告诉大人」。",q:"最安全的做法是什么？",opts:["答应保密，不管发生什么","把信息转发给其他同学","告诉可信任的大人，必要时保留证据，不独自处理","责怪朋友"],a:2,why:"涉及不舒服、威胁或安全风险的网络内容，不应承诺绝对保密。找可信任的大人协助是保护彼此的方式。"},
+{type:"反思与调整",story:"你用「我讯息」和朋友沟通后，对方仍然不愿意听。",q:"这是否代表你的方法完全失败？",opts:["是，我永远不应该表达","不是；可以先暂停，考虑界限，之后再沟通，必要时请成人协助","应该马上提高音量","必须让对方立刻认同"],a:1,why:"有效沟通不保证对方马上同意。我们能负责的是表达方式和自己的界限，也可以选择合适时机及寻求协助。"}
+]},
+{n:"终极决策岛",icon:"🏰",badge:"🏆",tasks:[
+{type:"综合情境",story:"你在班群看到有人取笑一位同学。你感到生气，也担心自己出声后被针对。",q:"哪一个行动计划最全面？",multi:true,opts:["不点赞、不转发嘲笑内容","私下支持被取笑的同学，询问他是否需要帮助","保存必要证据并向老师或GBK反映","加入嘲笑，避免自己成为目标","如果担心安全，找可信任的大人陪同处理"],a:[0,1,2,4],why:"不扩大伤害、支持受影响同学、保存必要证据并寻求成人协助，是较完整的安全行动计划。"},
+{type:"判断与修正",story:"你考试失利后想：「我每次都失败，我根本没有能力。」",q:"哪一个替代想法既真实又有帮助？",opts:["我一定会成为第一名","这次成绩不理想，但我可以找出一两个可改善的地方，并寻求帮助","考试完全没有意义","我比所有人都差"],a:1,why:"有弹性的想法不需要盲目乐观，而是承认困难，同时看见可采取的下一步。"},
+{type:"最终行动计划",story:"你发现自己连续一段时间睡不好、常担心、容易发脾气，已经影响上课和与朋友相处。",q:"哪一个计划最负责任？",opts:["继续假装没事","只靠游戏或短暂娱乐解决","记录困扰情况，告诉家长、老师或GBK，一起寻找支持","责怪自己不够坚强"],a:2,why:"当情绪困扰持续影响日常生活时，应寻求可信任成人的支持。必要时由家长协助联系专业人员。"}
+]}
+];
+const skillTips=[
+ {name:"情绪命名法",icon:"🏷️",steps:["停下来问自己：我现在是什么感受？","试着说得更具体：失落、委屈、嫉妒，还是担心？","补上一句：我可能因为……而有这种感受。"],try:"练习句：我现在感到_____，可能是因为我希望自己的意见被重视。"},
+ {name:"接纳＋自我关怀",icon:"💗",steps:["告诉自己：难过是可以的，不代表我很差。","用对待好朋友的语气对自己说话。","等情绪缓和后，再想下一步可以做什么。"],try:"练习句：这次我很失望，但一次结果不能代表我的全部能力。"},
+ {name:"事实与猜测分开",icon:"🕵️",steps:["写下摄像机能拍到的事实。","找出自己脑海里的猜测。","想一个其他可能解释，再决定是否需要确认。"],try:"练习句：我知道的是_____；我猜测的是_____；我还可以确认_____。"},
+ {name:"STOP 暂停法",icon:"⏸️",steps:["S — Stop：先停下来，不立即回应。","T — Take a breath：舒服地慢慢呼吸。","O — Observe：观察情绪、身体和想法。","P — Proceed：选择安全、合适的下一步。"],try:"现在试试：双脚踩稳地面，慢慢呼气两次，再决定要说什么。"},
+ {name:"事实检查三问",icon:"🔎",steps:["这件事有哪些证据？","有没有其他合理解释？","如果朋友遇到同样情况，我会怎样提醒他？"],try:"练习句：除了「他讨厌我」，还有没有「他正在忙」等其他可能？"},
+ {name:"压力拆小步",icon:"🪜",steps:["把大任务写下来。","选出最小、最容易开始的一步。","专心完成这一步，再安排下一步。","预留休息时间，不用一次解决全部。"],try:"练习：把「准备考试」改成「先复习一个小节 15 分钟」。"},
+ {name:"身体扫描＋呼吸",icon:"🌬️",steps:["留意肩膀、下巴、双手是否紧绷。","舒服地吸气，再缓缓呼气，不要憋气。","轻轻放松肩膀和双手，重复几次。"],try:"练习：现在放松肩膀，缓缓呼气；若头晕或不舒服，就恢复自然呼吸。"},
+ {name:"认知换框法",icon:"🧠",steps:["留意脑中出现的绝对化想法，例如「我每次都失败」。","把它改成更准确的说法。","加入一个可以采取的行动。"],try:"练习句：这次我没有达到目标，但我可以找出一个能改进的地方。"},
+ {name:"担忧时间＋行动清单",icon:"🗓️",steps:["把担忧写下来，不必一直在脑中重复。","分辨哪些事情是自己能控制的。","能行动的，写下一个小步骤；暂时不能控制的，先放一放。"],try:"练习：我能控制的是_____；我今天可以做的一小步是_____。"},
+ {name:"沟通前先冷静",icon:"🧊",steps:["先暂停，避免在情绪高峰时争辩。","想清楚自己希望对方理解什么。","选择适当时间和地点再沟通。"],try:"练习：我准备好要表达的重点是_____，而不是要赢过对方。"},
+ {name:"我讯息",icon:"🗣️",steps:["描述具体发生的事情，不贴标签。","说出自己的感受。","说明原因或需要，并提出清楚请求。"],try:"句型：当_____发生时，我感到_____，因为_____；我希望_____。"},
+ {name:"界限与安全求助",icon:"🛡️",steps:["清楚说出：我不喜欢这样，请停止。","如果对方持续或情况不安全，离开现场。","向老师、GBK或家长说明发生了什么。"],try:"练习句：请停止这样做。我不舒服；如果继续，我会找老师帮忙。"},
+ {name:"倾听与换位",icon:"👂",steps:["先让双方轮流说，不急着评判。","复述对方的意思，确认自己有没有听懂。","同时表达自己的感受和需要。"],try:"练习句：你的意思是_____，我理解对吗？我这边的感受是_____。"},
+ {name:"网络安全三步骤",icon:"📱",steps:["不点赞、不转发、不加入伤害行为。","保存必要证据，不继续传播。","向可信任的大人或学校报告，必要时请大人协助平台处理。"],try:"记住：不要独自处理威胁、羞辱或令人不舒服的网络内容。"},
+ {name:"弹性自我对话",icon:"🌱",steps:["发现「一定、永远、每次、全部」等极端词。","换成符合事实、不过度否定自己的说法。","加上一件可以尝试的具体行动。"],try:"练习句：这次不顺利，不代表我永远做不到；我可以先练习_____。"}
+];
+let unlockedSkills=[];
+function renderMap(){
+ $("scoreMap").textContent=score+" ⭐";$("mapText").textContent="等级：Year "+level+" · 完成五个岛屿，解锁进阶徽章。";
+ $("mapBar").style.width=(done.filter(Boolean).length*20)+"%";$("islands").innerHTML="";
+ data.forEach((s,i)=>{let b=document.createElement("button");b.className="btn island"+(done[i]?" done":"");b.innerHTML=`<span class="ico">${s.icon}</span><b>${i+1}. ${s.n}</b><span class="small muted">${done[i]?"🏅 已完成":"✨ 进入挑战"}</span>`;b.addEventListener("click",()=>startStage(i));$("islands").append(b);});
+ $("badges").innerHTML=data.map((s,i)=>`<span>${medals.includes(i)?s.badge:"🔒"}</span>`).join("");
+ $("scoreTop").textContent=score;$("xpTop").textContent=score;$("badgeTop").textContent=medals.length;
+ $("skillShelf").innerHTML=unlockedSkills.length?unlockedSkills.map(i=>`<div class="skill-action"><b>${skillTips[i].icon} ${skillTips[i].name}</b><br>${skillTips[i].steps.join(" · ")}</div>`).join(""):'<p class="small muted">还没有收藏技巧。完成挑战后就能解锁！</p>';
+}
+function makeQuestion(){
+ const s=data[stage],q=s.tasks[qi];answered=false;
+ $("stageName").textContent=s.icon+" "+s.n;$("qNo").textContent=`挑战 ${qi+1}/3`;$("qBar").style.width=(qi/3*100)+"%";
+ $("stageIcon").textContent=s.icon;$("taskType").textContent=q.type;$("scenario").textContent="📖 "+q.story;$("prompt").textContent=q.q;
+ $("interaction").innerHTML="";$("feedback").classList.add("hidden");$("skillReveal").classList.add("hidden");$("next").classList.add("hidden");$("reflection").classList.add("hidden");
+ if(q.multi){
+  q.opts.forEach((v,i)=>{let label=document.createElement("label");label.className="checkrow";let input=document.createElement("input");input.type="checkbox";input.value=i;let span=document.createElement("span");span.textContent=v;label.append(input,span);$("interaction").append(label);});
+  let submit=document.createElement("button");submit.className="btn primary";submit.style.width="100%";submit.textContent="提交选择";submit.addEventListener("click",()=>gradeMulti(q));$("interaction").append(submit);
+ }else if(q.sequence){
+  let box=document.createElement("div");box.className="sequence";box.id="sequenceBox";
+  q.sequence.forEach((v,i)=>{let b=document.createElement("button");b.className="btn";b.dataset.step=i;b.innerHTML=`<span class="num">${i+1}</span><span>${v}</span>`;b.addEventListener("click",()=>{let chosen=box.querySelectorAll(".selected").length;if(b.classList.contains("selected")){b.classList.remove("selected");b.querySelector(".num").textContent=i+1;}else{b.classList.add("selected");b.querySelector(".num").textContent=chosen+1;}});box.append(b);});
+  $("interaction").append(box);let submit=document.createElement("button");submit.className="btn primary";submit.style.width="100%";submit.textContent="提交步骤顺序";submit.addEventListener("click",()=>gradeSequence(q));$("interaction").append(submit);
+ }else{
+  q.opts.forEach((v,i)=>{let b=document.createElement("button");b.className="option";b.textContent=["A. ","B. ","C. ","D. "][i]+v;b.addEventListener("click",()=>gradeSingle(q,i));$("interaction").append(b);});
+ }
+}
+function showFeedback(ok,explain){
+ $("feedback").classList.remove("hidden");$("feedback").classList.toggle("good",ok);
+ $("fbTitle").textContent=ok?"🌟 判断正确！":"💡 参考解析";
+ $("fbText").textContent=explain;
+ const tip=skillTips[stage*3+qi];
+ $("skillReveal").classList.remove("hidden");
+ $("skillReveal").innerHTML=`<h3>${tip.icon} 技巧解锁：${tip.name}</h3><div class="small muted">不只是知道答案，也学会一个可以带进生活的方法：</div>${tip.steps.map((x,i)=>`<div class="skillstep">${i+1}. ${x}</div>`).join("")}<div class="skill-action"><b>🎯 现在练一练</b><br>${tip.try}</div><button class="skill-save" id="saveSkill">${unlockedSkills.includes(stage*3+qi)?"✓ 已收藏技巧":"＋ 收藏这个技巧"}</button>`;
+ const save=$("saveSkill");
+ save.addEventListener("click",()=>{const id=stage*3+qi;if(!unlockedSkills.includes(id)){unlockedSkills.push(id);score+=3;renderMap();}save.textContent="✓ 已收藏技巧";save.disabled=true;});
+ $("next").classList.remove("hidden");$("next").textContent=qi===2?"完成本岛 🏅":"下一项挑战 ➜";
+}
+function gradeSingle(q,i){if(answered)return;answered=true;let ok=i===q.a;if(ok)score+=10;
+ [...$("interaction").querySelectorAll(".option")].forEach((b,j)=>{b.disabled=true;if(j===q.a)b.classList.add("correct");else if(j===i)b.classList.add("wrong");});
+ showFeedback(ok,(ok?"很好！":"较合适的选择是："+q.opts[q.a]+"。")+q.why);renderMap();}
+function sameSet(a,b){return a.length===b.length&&a.every(x=>b.includes(x));}
+function gradeMulti(q){if(answered)return;let selected=[...$("interaction").querySelectorAll("input:checked")].map(x=>+x.value);if(!selected.length){alert("请先选择至少一个选项。");return;}answered=true;let ok=sameSet(selected,q.a);if(ok)score+=15;
+ $("interaction").querySelectorAll("input").forEach(x=>x.disabled=true);$("interaction").querySelector("button").disabled=true;
+ showFeedback(ok,(ok?"选择完整！获得15星星。":"正确答案包含："+q.a.map(i=>q.opts[i]).join("；")+"。")+q.why);renderMap();}
+function gradeSequence(q){if(answered)return;let chosen=[...$("sequenceBox").querySelectorAll("button.selected")];if(chosen.length!==q.order.length){alert("请为每一个步骤排序后再提交。");return;}answered=true;let order=chosen.map(x=>+x.dataset.step);let ok=sameSet(order,q.order)&&order.every((v,i)=>v===q.order[i]);if(ok)score+=15;
+ $("sequenceBox").querySelectorAll("button").forEach(b=>b.disabled=true);$("interaction").querySelector("button").disabled=true;
+ showFeedback(ok, (ok?"步骤顺序正确！获得15星星。":"参考顺序："+q.order.map(i=>q.sequence[i]).join(" → ")+"。")+q.why);renderMap();}
+function startStage(i){stage=i;qi=0;makeQuestion();show("play");}
+function finishStage(){done[stage]=true;if(!medals.includes(stage))medals.push(stage);score+=10;renderMap();if(done.every(Boolean)){let rank=score>=180?"🏆 情绪策略大师":score>=120?"🌟 情绪管理高手":"🌱 勇敢成长探险家";$("endAvatar").textContent=avatar;$("endName").textContent=name;$("endScore").textContent=score;$("rank").textContent=rank;$("rankText").textContent="你完成了五个进阶岛屿。继续在日常生活中练习停一停、看一看、想一想、选一选和求帮助。";show("finish");}else show("map");}
+document.querySelectorAll(".level").forEach(b=>b.addEventListener("click",()=>{level=+b.dataset.level;document.querySelectorAll(".level").forEach(x=>x.classList.toggle("selected",x===b));}));
+document.querySelectorAll(".avatar-btn").forEach(b=>b.addEventListener("click",()=>{avatar=b.dataset.avatar;document.querySelectorAll(".avatar-btn").forEach(x=>x.classList.toggle("selected",x===b));}));
+$("start").addEventListener("click",()=>{name=$("nick").value.trim()||"小小探险家";$("playerName").textContent=name;$("playerAvatar").textContent=avatar;$("levelLabel").textContent="Year "+level+" · 进阶挑战";renderMap();show("map");});
+$("next").addEventListener("click",()=>{qi++;if(qi>=3)finishStage();else makeQuestion();});
+$("back").addEventListener("click",()=>{renderMap();show("map");});
+$("toMap").addEventListener("click",()=>{renderMap();show("map");});
+$("again").addEventListener("click",()=>{score=0;done=[false,false,false,false,false];medals=[];unlockedSkills=[];renderMap();show("welcome");});
+})();
+</script>
+</body></html>
